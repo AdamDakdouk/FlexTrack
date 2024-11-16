@@ -116,21 +116,28 @@ router.post('/forgot-password', async (req, res) => {
     try {
         const { email } = req.body;
         const user = await User.findOne({ email });
+        
+        // If user not found, return an error
         if (!user) {
-            return res.status(404).json({ error: "User does not exist" });
+            return res.status(404).json({ error: "Email not found. Please check your email address." });
         }
 
+        // Generate a reset code
         const resetCode = crypto.randomBytes(3).toString('hex');
         user.resetCode = resetCode;
-        user.resetCodeExpiration = Date.now() + 3600000; 
+        user.resetCodeExpiration = Date.now() + 3600000; // 1 hour expiration
         await user.save();
 
-        await sendEmail(email, 'Password Reset Verification Code', `Your code is: ${resetCode}`);
-        res.json({ message: 'Verification code sent to your email' });
+        // Send the reset code via email
+        await sendEmail(email, 'Password Reset Verification Code', `Your verification code is: ${resetCode}`);
+        
+        res.status(200).json({ message: 'Verification code sent to your email' });
+
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
 });
+
 
 // Reset Password Route
 router.post('/reset-password', async (req, res) => {

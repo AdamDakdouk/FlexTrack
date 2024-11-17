@@ -19,10 +19,8 @@ const hashPassword = async (password) => bcrypt.hash(password, 10);
 
 const generateVerificationCode = () => Math.floor(100000 + Math.random() * 900000);
 
-const findUserByEmailOrUsername = async (emailOrUsername) => {
-    return await User.findOne({
-        $or: [{ email: emailOrUsername }, { username: emailOrUsername }]
-    });
+const findByEmail = async (email) => {
+        return await User.findOne({ email });
 };
 
 // Nodemailer transporter setup
@@ -37,17 +35,17 @@ const transporter = nodemailer.createTransport({
 // Register Route
 router.post('/register', async (req, res) => {
     try {
-        const { email, username, password } = req.body;
+        const { email, password } = req.body;  // Remove username from here
 
-        const existingUser = await findUserByEmailOrUsername(email);
+        // Check if user already exists based on email
+        const existingUser = await findByEmail(email);  // Now only checks for email
         if (existingUser) {
-            return res.status(400).json({ error: "Email or username already exists" });
+            return res.status(400).json({ error: "Email already exists" });  // Adjusted error message
         }
 
         const hashedPassword = await hashPassword(password);
         const newUser = new User({
             email,
-            username,
             password: hashedPassword,
             isEmailVerified: false,
         });
@@ -65,6 +63,7 @@ router.post('/register', async (req, res) => {
         res.status(400).json({ error: error.message });
     }
 });
+
 
 // Verify Email Route
 router.post('/verify-email', async (req, res) => {
@@ -93,7 +92,7 @@ router.post('/verify-email', async (req, res) => {
 router.post('/login', async (req, res) => {
     try {
         const { usernameOrEmail, password } = req.body;
-        const user = await findUserByEmailOrUsername(usernameOrEmail);
+        const user = await findByEmail(usernameOrEmail);
 
         if (!user) {
             return res.status(401).json({ message: "Invalid credentials" });

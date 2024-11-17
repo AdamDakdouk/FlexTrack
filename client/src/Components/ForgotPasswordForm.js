@@ -40,7 +40,7 @@ const ForgotPasswordForm = ({ formData, handleChange, setIsForgotPassword }) => 
         e.preventDefault();
 
         try {
-            const response = await axios.post('/api/auth/forgot-password', { email: formData.email });
+            await axios.post('/api/auth/forgot-password', { email: formData.email });
 
             // If email is found and code is sent, show the verification code input
             setVerificationSent(true);

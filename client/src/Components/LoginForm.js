@@ -1,7 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const LoginForm = ({ formData, handleChange, handleSubmit }) => {
+    const [error, setError] = useState('');
+
     const styles = {
+        form: {
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+        },
         input: {
             width: '100%',
             padding: '10px',
@@ -19,20 +26,38 @@ const LoginForm = ({ formData, handleChange, handleSubmit }) => {
             cursor: 'pointer',
             fontWeight: 'bold',
         },
+        h2: {
+            color: '#FFD700'
+        },
+        error: {
+            color: '#FFD700',
+            backgroundColor: '#121212',
+            padding: '10px',
+            borderRadius: '5px',
+            marginTop: '10px',
+            fontWeight: 'bold',
+            width: '100%',
+            textAlign: 'center',
+        },
     };
 
-    const onSubmit = (e) => {
+    const onSubmit = async (e) => {
         e.preventDefault();
-        handleSubmit();
+        try {
+            await handleSubmit();
+        } catch (err) {
+            setError(err.response?.data?.message || 'Invalid credentials. Please try again.');
+        }
     };
 
     return (
-        <form onSubmit={onSubmit}>
+        <form style={styles.form} onSubmit={onSubmit}>
+            <h2 style={styles.h2}>Login</h2>
             <input
-                type="email"
-                name="email"
-                placeholder="Email"
-                value={formData.email}
+                type="text"
+                name="usernameOrEmail"
+                placeholder="Email or Username"
+                value={formData.usernameOrEmail}
                 onChange={handleChange}
                 style={styles.input}
                 required
@@ -46,7 +71,8 @@ const LoginForm = ({ formData, handleChange, handleSubmit }) => {
                 style={styles.input}
                 required
             />
-            <button type="submit" style={styles.button}>Log In</button>
+            <button type="submit" style={styles.button}>Login</button>
+            {error && <div style={styles.error}>{error}</div>}
         </form>
     );
 };

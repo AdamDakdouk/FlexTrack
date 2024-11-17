@@ -2,7 +2,6 @@ import React from 'react';
 
 const SignUpForm = ({ formData, handleChange, handleSubmit, setError, error }) => {
     const styles = {
-        
         input: {
             width: '100%',
             padding: '10px',
@@ -21,16 +20,16 @@ const SignUpForm = ({ formData, handleChange, handleSubmit, setError, error }) =
             fontWeight: 'bold',
         },
         error: {
-            backgroundColor: '#FF4C4C',
+            backgroundColor: '#FFD700',
             color: '#121212',
             padding: '10px',
             borderRadius: '5px',
             marginTop: '10px',
         },
         h2: {
-            color: '#FFD700',  // Add some styling to the heading
+            color: '#FFD700',  
             fontSize: '24px',
-            marginBottom: '20px',  // Add space below
+            marginBottom: '20px',  
         }
     };
 
@@ -45,18 +44,10 @@ const SignUpForm = ({ formData, handleChange, handleSubmit, setError, error }) =
     };
 
     return (
-        <form  onSubmit={onSubmit}>
+        <form onSubmit={onSubmit}>
             <h2 style={styles.h2}>Register</h2>
-            
-            <input
-                type="text"
-                name="name"
-                placeholder="Name"
-                value={formData.name}
-                onChange={handleChange}
-                style={styles.input}
-                required
-            />
+
+            {/* Remove the name field */}
             <input
                 type="email"
                 name="email"

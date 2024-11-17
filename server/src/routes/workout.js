@@ -59,12 +59,24 @@ router.post('/add', async (req, res) => {
 // Get all workouts for a user
 router.get('/user-workouts', async (req, res) => {
     try {
-        const user = await User.findById(req.userId).populate('workouts', 'name category muscleGroup'); // Populate workouts with only relevant details
-        res.status(200).json(user.workouts);
+        const { date } = req.query;  // Get the date from query params
+        const user = await User.findById(req.userId).populate('workouts', 'name category muscleGroup date'); // Make sure 'date' is included in the populated workouts
+        
+        let workouts = user.workouts;
+        
+        if (date) {
+            // If a date is provided, filter the workouts by date
+            workouts = workouts.filter(workout => {
+                return new Date(workout.date).toISOString() === new Date(date).toISOString();
+            });
+        }
+        
+        res.status(200).json(workouts);  // Return filtered workouts
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
 });
+
 
 // Get a specific workout by ID
 router.get('/:id', async (req, res) => {

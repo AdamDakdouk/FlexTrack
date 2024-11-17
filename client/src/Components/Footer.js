@@ -1,5 +1,7 @@
 import React from 'react';
-import logo from '../Assets/logo.png'; // Replace with the actual path to your logo image
+import track from '../Assets/track.png';
+import train from '../Assets/train.png';
+import transform from '../Assets/transform.png';
 
 const Footer = () => {
     const styles = {
@@ -10,28 +12,44 @@ const Footer = () => {
             backgroundColor: '#1F1F1F',
             color: '#FFD700',
             display: 'flex',
-            justifyContent: 'flex-start',
+            justifyContent: 'center',
             alignItems: 'center',
             padding: '10px 20px',
             boxSizing: 'border-box',
             fontSize: '20px',
             zIndex: 1000, // Ensure the footer is on top
         },
-        logo: {
-            width: '60px',
-            height: '60px',
-            marginRight: '10px',
+        sloganContainer: {
+            display: 'flex',
+            alignItems: 'center',
+            backgroundColor:'#1F1F1F',
         },
         slogan: {
             fontWeight: 'bold',
-            backgroundColor:'#1F1F1F'
+            backgroundColor: '#1F1F1F',
+            marginRight: '10px', // Space between text and image
         },
+        image: {
+            width: '30px', 
+            height: 'auto',
+            marginRight: '40px'
+        }
     };
 
     return (
         <div style={styles.footer}>
-            <img src={logo} alt="Logo" style={styles.logo} />
-            <span style={styles.slogan}>Track. Train. Transform</span>
+            <div style={styles.sloganContainer}>
+                <span style={styles.slogan}>Track</span>
+                <img src={track} alt="Track" style={styles.image} />
+            </div>
+            <div style={styles.sloganContainer}>
+                <span style={styles.slogan}>Train</span>
+                <img src={train} alt="Train" style={styles.image} />
+            </div>
+            <div style={styles.sloganContainer}>
+                <span style={styles.slogan}>Transform</span>
+                <img src={transform} alt="Transform" style={styles.image} />
+            </div>
         </div>
     );
 };
